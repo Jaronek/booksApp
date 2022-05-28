@@ -5,11 +5,16 @@ const select = {
   templateOf: {
     bookTemplate: '#template-book',
   },
+
   books: {
     booksList: '.books-list',
-    booksImage: '.books-list .book__image',
     booksFavorite: 'favorite',
-  }
+    hidden: 'hidden',
+  },
+
+  form: {
+    inputs: '.filters',
+  },
 };
 
 const templates = {
@@ -26,25 +31,64 @@ function render(data){
   }
 }
 
-
+const filters = [];
 function initActions(){
   const favoriteBooks = [];
-  const books = document.querySelectorAll(select.books.booksImage);
-  for(let book of books){
-    book.addEventListener('dblclick', function(event){  
-      if(event.target.offsetParent.classList.contains('.book__image'))
-        event.preventDefault();
-        const bookId = book.getAttribute('data-id');
-        if(!favoriteBooks.includes(bookId)){
-          book.classList.add(select.books.booksFavorite);
-          favoriteBooks.push(bookId);
-        }else if(favoriteBooks.includes(bookId)) {
-          book.classList.remove(select.books.booksFavorite);
-          const index = favoriteBooks.indexOf(bookId);
-          favoriteBooks.splice(index, (1));
-        }
-    });
+  const book = document.querySelector(select.books.booksList);
+  const form = document.querySelector(select.form.inputs);
+
+  form.addEventListener('click', function(event){
+    if(event.target.checked){
+      if(!filters.includes(event.target.value)){
+        filters.push(event.target.value);
+      }else if (filters.includes(event.target.value)){
+        const index = filters.indexOf(event.target.value);
+        filters.splice(index, (1))      
+      }
+    }else if(!event.target.checked){
+      if(!filters.includes(event.target.value)){
+        filters.push(event.target.value);
+      }else if (filters.includes(event.target.value)){
+        const index = filters.indexOf(event.target.value);
+        filters.splice(index, (1))      
+      }
+    }
+    filterBook();
+  });
+
+  book.addEventListener('dblclick', function(event){  
+    console.log(event.target.offsetParent);
+    if(event.target.offsetParent.classList.contains('book__image')){
+      event.preventDefault();
+      const bookId = event.target.offsetParent.getAttribute('data-id');
+      if(!favoriteBooks.includes(bookId)){
+        event.target.offsetParent.classList.add(select.books.booksFavorite);
+        favoriteBooks.push(bookId);
+      }else if(favoriteBooks.includes(bookId)) {
+        event.target.offsetParent.classList.remove(select.books.booksFavorite);
+        const index = favoriteBooks.indexOf(bookId);
+        favoriteBooks.splice(index, (1));
+      }
+    }
+  });
+};
+
+
+function filterBook(){
+  for(let book of data){
+    console.log(book.details);
+    let shouldBeHidden = false;
+    for(let filter of filters){
+      if(!book.details[filter]){
+        shouldBeHidden = true;
+        console.log(book.details[filter]);
+        break;
+      }
+    }
+    
   }
 }
+
 render(data);
 initActions();
+
