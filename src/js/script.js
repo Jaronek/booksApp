@@ -26,12 +26,12 @@ const templates = {
 const data = dataSource.books;
 function render(data){
   for(let book of data){
-    const rating = book.rating;
-    const ratingBgc = determineRatingBgc(rating);
+    const ratingBgc = determineRatingBgc(book.rating);
+    const ratingWidth = book.rating * 10 + '%';
     const generatedHTML = templates.books(book);
     const generatedDOM = utils.createDOMFromHTML(generatedHTML);
     const parent = document.querySelector(select.books.booksList);
-    parent.appendChild(generatedDOM);
+    parent.appendChild(generatedDOM); 
   }
 }
 
@@ -88,25 +88,19 @@ function filterBook(){
 }
 
 function determineRatingBgc(rating){
-  
-  const element = document.querySelectorAll(select.books.rating);
-  let out = '';
-  let computedStyle = window.getComputedStyle(select.books.rating);
-  console.log(computedStyle);
-  console.log(element);
- 
+  let background = ''
   if(rating <= 6){
-   out += "linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%);";
+    background = 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%);';
   }else if(rating > 6 && rating <= 8){
-   out += "linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%);";
+    background = 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%);';
   }else if(rating > 8 && rating <= 9){
-   out += "linear-gradient(to bottom, #299a0b 0%, #299a0b 100%);";
+    background = 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%);';
   }else if(rating > 9){
-   out += "linear-gradient(to bottom, #ff0084 0%,#ff0084 100%);";
+    background = 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%);';
   }
-  console.log(out);
-}
 
+  return background;
+}
 
 render(data);
 initActions();
