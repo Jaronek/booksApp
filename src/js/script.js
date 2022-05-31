@@ -21,16 +21,14 @@ const select = {
 const templates = {
   books: Handlebars.compile(document.querySelector(select.templateOf.bookTemplate).innerHTML),
 };
-
 const data = dataSource.books;
 function render(data){
   for(let book of data){
     const ratingBgc = determineRatingBgc(book.rating);
     const ratingWidth ='width: ' + book.rating * 10 + '%;';
-    const ratingParam = {
-      ratingBgc: [ratingBgc],
-      ratingWidth: [ratingWidth],
-    }
+    book.ratingBgc = ratingBgc;
+    book.ratingWidth = ratingWidth;
+    console.log(book);
     const generatedHTML = templates.books(book);
     const generatedDOM = utils.createDOMFromHTML(generatedHTML);
     const parent = document.querySelector(select.books.booksList);
@@ -71,8 +69,7 @@ function initActions(){
   });
 }
 function filterBook(){
-  const hidden = document.querySelector(select.books.hidden);
-
+  
   for(let book of data){
     let shouldBeHidden = false;
     for(const filter of filters){
