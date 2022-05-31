@@ -11,7 +11,6 @@ const select = {
     booksImage: '.books-list .book__image',
     booksFavorite: 'favorite',
     hidden: 'hidden',
-    rating: '.book__rating__fill'
   },
 
   form: {
@@ -27,7 +26,11 @@ const data = dataSource.books;
 function render(data){
   for(let book of data){
     const ratingBgc = determineRatingBgc(book.rating);
-    const ratingWidth = book.rating * 10 + '%';
+    const ratingWidth ='width: ' + book.rating * 10 + '%;';
+    const ratingParam = {
+      ratingBgc: [ratingBgc],
+      ratingWidth: [ratingWidth],
+    }
     const generatedHTML = templates.books(book);
     const generatedDOM = utils.createDOMFromHTML(generatedHTML);
     const parent = document.querySelector(select.books.booksList);
@@ -80,23 +83,23 @@ function filterBook(){
     }
     const domElement = document.querySelector('[data-id="' +  book.id + '"]');
     if(shouldBeHidden){
-      domElement.classList.add(hidden);
+      domElement.classList.add(select.books.hidden);
     }else if(!shouldBeHidden){
-      domElement.classList.remove(hidden);
+      domElement.classList.remove(select.books.hidden);
     }
   }
 }
 
 function determineRatingBgc(rating){
-  let background = ''
+  let background = '';
   if(rating <= 6){
-    background = 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%);';
+    background = 'background: linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%);';
   }else if(rating > 6 && rating <= 8){
-    background = 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%);';
+    background = 'background: linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%);';
   }else if(rating > 8 && rating <= 9){
-    background = 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%);';
+    background = 'background: linear-gradient(to bottom, #299a0b 0%, #299a0b 100%);';
   }else if(rating > 9){
-    background = 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%);';
+    background = 'background: linear-gradient(to bottom, #ff0084 0%,#ff0084 100%);';
   }
 
   return background;
